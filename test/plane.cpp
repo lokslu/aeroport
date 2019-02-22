@@ -27,10 +27,16 @@ plane::plane()
 
 void plane::vvod_nap_klav(string*type_mas_planet)
 {
-	
-
-	int kolstrokmenu;
+	int nober, kolstrokmenu;
 	kolstrokmenu = 3;
+
+	cout << "¬ведите номер рейса\n";
+	cin >> nober;
+	nomber_reis = nober;
+
+
+
+	
 	
 
 	
@@ -168,7 +174,7 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 
 void plane::save_text()
 {
-	cout << type_plenet << ",\n" << point_plein << ",\n" << time_vilet << ",\n" << time_finish <<endl;
+	cout << nomber_reis << type_plenet << ",\n" << point_plein << ",\n" << time_vilet << ",\n" << time_finish <<endl;
 	system("pause");
 
 
