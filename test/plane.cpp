@@ -27,24 +27,20 @@ plane::plane()
 
 void plane::vvod_nap_klav(string*type_mas_planet)
 {
+
+
+	{
 	int nober, kolstrokmenu;
-	kolstrokmenu = 3;
+	kolstrokmenu = 4;
 
 	cout << "Введите номер рейса\n";
 	cin >> nober;
 	nomber_reis = nober;
 
 
-
-	
-	
-
-	
-	
-	
 	type_plenet = type_mas_planet[startMenuCycle(type_mas_planet, kolstrokmenu)];
 	system("cls");
-	
+
 	string str;//локальная переменная пункта назначения
 	cout << "Введите пункт назначения" << endl;
 	cin >> str;
@@ -52,129 +48,120 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 
 	system("cls");
 
-	
-	
-							// преобразует время с одного числа с запятой в 2 целих
-		int x, i;
-		i = 0;
-		float y, z;
-		cout << "Введите время вылета." << endl;
-		do 
+
+
+	// преобразует время с одного числа с запятой в 2 целих
+	int x, i;
+	i = 0;
+	float y, z;
+	cout << "Введите время вылета." << endl;
+	do
+	{
+		cout << "Введите количество часов" << endl;
+		cin >> x;
+		if (x >= 24 || x < 0)
 		{
-			cout << "Введите количество часов" << endl;
-			cin >> x;	
-			if (x >= 24 || x<0)
+
+			i = i + 1;
+			if (i == 7)
 			{
-				
-				i=i+1;
-				if (i == 7) 
-				{ 
-					system("cls"); 
-					i = 0;
-				}
-				cout << "вы ввели не коректные даные. Ведите заново"<<endl;
+				system("cls");
+				i = 0;
 			}
-			else
+			cout << "вы ввели не коректные даные. Ведите заново" << endl;
+		}
+		else
+		{
+			do
 			{
-				do
+				cout << "Введите количество минут" << endl;
+				cin >> y;
+				if (y >= 60 || y < 0)
 				{
-					cout << "Введите количество минут" << endl;
-					cin >> y;
-					if (y >= 60 || y < 0)
+					i = i + 1;;
+					if (i == 7)
 					{
-						i = i + 1;;
-						if (i == 7) 
-						{ 
-						system("cls"); 
+						system("cls");
 						i = 0;
-						}
-						cout << "вы ввели не коректные даные. Ведите заново" << endl;
 					}
-					else
-					{
-						y = y / 100;
-						y = x + y;
-					}
-				} while (y>=60 || y<0);
-			}
-			
-		} while (x >= 24 || x < 0);
-		
-		stringstream ss, yy; // для переобразавания float в string
-		ss << y;
-		ss >> str;
-
-		time_vilet = str;
-
-
-		x = 0;
-		y = 0;
-		str ="";
-
-		cout << "Введите время Прибытия." << endl;
-		do
-		{
-			cout << "Введите количество часов" << endl;
-			cin >> x;
-			if (x >= 24 || x < 0)
-			{
-
-				i = i + 1;
-				if (i == 7)
-				{
-					system("cls");
-					i = 0;
+					cout << "вы ввели не коректные даные. Ведите заново" << endl;
 				}
-				cout << "вы ввели не коректные даные. Ведите заново" << endl;
-			}
-			else
-			{
-				do
+				else
 				{
-					cout << "Введите количество минут" << endl;
-					cin >> y;
-					if (y >= 60 || y < 0)
-					{
-						i = i + 1;;
-						if (i == 7)
-						{
-							system("cls");
-							i = 0;
-						}
-						cout << "вы ввели не коректные даные. Ведите заново" << endl;
-					}
-					else
-					{
-						y = y / 100;
-						y = x + y;
-					}
-				} while (y >= 60 || y < 0);
+					y = y / 100;
+					y = x + y;
+				}
+			} while (y >= 60 || y < 0);
+		}
+
+	} while (x >= 24 || x < 0);
+
+	stringstream ss, yy; // для переобразавания float в string
+	ss << y;
+	ss >> str;
+
+	time_vilet = str;
+
+
+	x = 0;
+	y = 0;
+	str = "";
+
+	cout << "Введите время Прибытия." << endl;
+	do
+	{
+		cout << "Введите количество часов" << endl;
+		cin >> x;
+		if (x >= 24 || x < 0)
+		{
+
+			i = i + 1;
+			if (i == 7)
+			{
+				system("cls");
+				i = 0;
 			}
+			cout << "вы ввели не коректные даные. Ведите заново" << endl;
+		}
+		else
+		{
+			do
+			{
+				cout << "Введите количество минут" << endl;
+				cin >> y;
+				if (y >= 60 || y < 0)
+				{
+					i = i + 1;;
+					if (i == 7)
+					{
+						system("cls");
+						i = 0;
+					}
+					cout << "вы ввели не коректные даные. Ведите заново" << endl;
+				}
+				else
+				{
+					y = y / 100;
+					y = x + y;
+				}
+			} while (y >= 60 || y < 0);
+		}
 
-		} while (x >= 24 || x < 0);
-		
-		yy << y;
-		yy>> str;
+	} while (x >= 24 || x < 0);
 
-		time_finish= str;
+	yy << y;
+	yy >> str;
 
+	time_finish = str;
 
-
-
-
-
-
-
-
-
-
-
+}
 
 }
 
 void plane::save_text()
 {
-	cout << nomber_reis << type_plenet << ",\n" << point_plein << ",\n" << time_vilet << ",\n" << time_finish <<endl;
+		system("cls");
+	cout << nomber_reis << ",\n" << type_plenet << ",\n" << point_plein << ",\n" << time_vilet << ",\n" << time_finish <<endl;
 	system("pause");
 
 
