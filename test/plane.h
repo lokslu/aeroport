@@ -15,7 +15,7 @@ public:
 	float plane_time;//час польоту
 
 	void vvod_nap_klav(string*type_mas_planet);//Збереження у текстовому файлі;
-	void save_text();//Введення напрямку з клавіатури;
+	void save_text(string*zapis_data);//Введення напрямку з клавіатури;
 	
 	void read_text();//Зчитування інформації з файлу та відбір рейсів у даному напрямку;	
 	void search_for_dest();//Пошук рейсів з мінімальним часом польоту у заданому напрямку;

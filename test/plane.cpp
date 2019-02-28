@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include "plane.h" //обь€вление класа
 #include "menu.h" // реализацы€ мею
-#include <istream>
+
 
 
 #define KEY_UP 72 //по стандарту определ€ет что  KEY_UP -- 72
@@ -158,12 +158,19 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 
 }
 
-void plane::save_text()
+void plane::save_text(string*zapis_data)
 {
-		system("cls");
-	cout << nomber_reis << ",\n" << type_plenet << ",\n" << point_plein << ",\n" << time_vilet << ",\n" << time_finish <<endl;
-	system("pause");
-
+		
+	cout << nomber_reis << ", " << type_plenet << ", " << point_plein << "," << time_vilet << "," << time_finish <<endl;
+	int gt;
+	string name;
+	gt = startMenuCycle(zapis_data, 3);
+	if (gt==1)
+	{
+		cout << "¬ведте им€ файла";
+		getline(cin, name);
+	
+	}
 
 
 
