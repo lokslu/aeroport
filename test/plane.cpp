@@ -5,11 +5,11 @@
 #include <sstream> //для  stringstream  // для переобразавания float в string
 #include <string>
 #include <vector>
-#include <stdio.h>
+#include <stdio.h>//
 #include <windows.h>
 #include "plane.h" //обьявление класа
 #include "menu.h" // реализацыя меню
-#include "dirent.h"
+#include "dirent.h"//
 #include <filesystem>
 
 
@@ -26,7 +26,6 @@ using namespace std;
 plane::plane()
 {
 }
-
 
 void plane::vvod_nap_klav(string*type_mas_planet)
 {
@@ -160,7 +159,6 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 }
 
 }
-
 void plane::save_text(string neme_file)
 {
 
@@ -180,8 +178,12 @@ void plane::save_text_dop(string neme_file)
 	file.close();
 
 }
-void plane::read_text()
+void plane::read_text(string name_str)
 {
+	string pyth_k_file=fynk_read_file();
+	ifstream file(pyth_k_file, ios::in);
+	
+
 }
 void plane::search_for_dest()
 {
@@ -189,9 +191,11 @@ void plane::search_for_dest()
 void plane::vivod_cmd()
 {
 }	
+
 plane::~plane()
 {
 }
+
 void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 {
 	int zapis, gt, gd;
@@ -280,55 +284,17 @@ void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 	break;
 	case 2:
 	{
-		//***********************
 
-		vector<string> l;
 
-		//header('Content-Type: text/html; charset=utf-8'); //ПЕРЕКЛЮЧАЕТ ТИП ШИФРОВАНИЯ
+		string neme_file = fynk_read_file();
 
-		namespace fs = std::experimental::filesystem;
+		if (neme_file == "%$%")
 		{
-
-			stringstream ss; // для переобразавания float в string
-			string ff[10];
-			int h = 0;
-			fs::path p;
-			for (const auto & entry : fs::directory_iterator("./data"))
-			{
-				p = entry.path();
-				
-				//ff[h]= p.string();
-				l.emplace_back(p.string());
-				//h++;
-			}
-
-		
-
-			int size_din_mas_menu= size(l) + 1;
-			string *lp = new string[size_din_mas_menu];
-			lp[0] = "Выбирете файл:";
-			h = 0;
-			for (int i = 1; i < size_din_mas_menu; i++)
-			{
-
-				lp[i] = l[h];
-				lp[i].erase(0, 7);
-				h++;
-			}
-
-
-
-			int menunom;
-			 menunom = startMenuCycle(lp, size_din_mas_menu);
-			
-			string neme_file;
-
-			neme_file.append("./data/" + lp[menunom]);
-			delete[] lp;
-
-
-			//***********************
-
+			system("cls");
+			cout << "У вас нету не единого файла/n";
+			system("pause");
+			break;
+		}
 
 			if (0 == zapis % 2)
 			{
@@ -349,7 +315,7 @@ void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 				delete[] numbers;
 			}
 
-		}
+		
 
 	}
 	break;
@@ -357,3 +323,58 @@ void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 
 }
 
+string fynk_read_file()
+{
+
+
+
+	vector<string> l;
+
+	//header('Content-Type: text/html; charset=utf-8'); //ПЕРЕКЛЮЧАЕТ ТИП ШИФРОВАНИЯ
+
+	namespace fs = std::experimental::filesystem;
+	{
+
+		int h = 0;
+		fs::path p;
+		for (const auto & entry : fs::directory_iterator("./data"))
+		{
+			p = entry.path();
+
+			//ff[h]= p.string();
+			l.emplace_back(p.string());
+			//h++;
+		}
+
+
+
+		int size_din_mas_menu = size(l) + 1;
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!! то что не позволит вивести пустое меню
+		if (size_din_mas_menu <= 1)
+		{
+			return "%$%";
+		}
+		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		string *lp = new string[size_din_mas_menu];
+		lp[0] = "Выбирете файл:";
+		h = 0;
+		for (int i = 1; i < size_din_mas_menu; i++)
+		{
+
+			lp[i] = l[h];
+			lp[i].erase(0, 7);
+			h++;
+		}
+
+
+
+		int menunom;
+		menunom = startMenuCycle(lp, size_din_mas_menu);
+
+		string neme_file;
+
+		neme_file.append("./data/" + lp[menunom]);
+		delete[] lp;
+		return neme_file;
+	}
+}
