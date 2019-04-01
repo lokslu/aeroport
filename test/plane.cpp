@@ -11,6 +11,7 @@
 #include "menu.h" // реализацыя меню
 #include "dirent.h"//
 #include <filesystem>
+#include <conio.h>
 
 
 #define KEY_UP 72 //по стандарту определяет что  KEY_UP -- 72
@@ -31,7 +32,7 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 {
 
 
-	{
+	
 	int nober, kolstrokmenu;
 	kolstrokmenu = 4;
 
@@ -98,7 +99,7 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 
 	} while (x >= 24 || x < 0);
 
-	stringstream ss, yy; // для переобразавания float в string
+	stringstream ss; // для переобразавания float в string
 	ss << y;
 	ss >> str;
 
@@ -109,7 +110,7 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 	y = 0;
 	str = "";
 
-	cout << "Введите время Прибытия." << endl;
+	cout << "Введите время Польота." << endl;
 	do
 	{
 		cout << "Введите количество часов" << endl;
@@ -151,12 +152,9 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 
 	} while (x >= 24 || x < 0);
 
-	yy << y;
-	yy >> str;
+	time_plein = y;
 
-	time_finish = str;
-
-}
+	
 
 }
 void plane::save_text(string neme_file)
@@ -164,7 +162,7 @@ void plane::save_text(string neme_file)
 
 
 		ofstream file(neme_file, ios::app); // file -переменная файла к которому обращяемся
-		file<< nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_finish << endl;
+		file<< nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_plein << endl;
 		file.close();
 	
 }
@@ -174,22 +172,31 @@ void plane::save_text_dop(string neme_file)
 	
 	fstream file(neme_file, ios::app);
 	
-	file << nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_finish << endl;
+	file << nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_plein << endl;
 	file.close();
 
 }
-void plane::read_text(string name_str)
+void plane::read_text(int nomber_reis1,string type_plenet1, string point_plein1, string time_vilet1, float time_plein1)
 {
-	string pyth_k_file=fynk_read_file();
-	ifstream file(pyth_k_file, ios::in);
-	
+	nomber_reis = nomber_reis1;
+	type_plenet = type_plenet1;
+	point_plein = point_plein1;
+	time_vilet = time_vilet1;
+	time_plein = time_plein1;
 
 }
-void plane::search_for_dest()
+float plane::search_for_dest()
 {
+	return time_plein;
 }
 void plane::vivod_cmd()
 {
+	cout << "Номер рейса: " << nomber_reis << endl;
+	cout << "Тип самолёта: " << type_plenet<< endl;
+	cout << "Пункт назначения: " << point_plein << endl;
+	cout << "Время вылета: " << time_vilet<< endl;
+	cout << "Время в пути: " << time_plein << endl;
+	cout << "---------------------------------------------" << endl;
 }	
 
 plane::~plane()
@@ -377,4 +384,112 @@ string fynk_read_file()
 		delete[] lp;
 		return neme_file;
 	}
+}
+
+void read_and_sotr() 
+{
+	string rtrt;
+	rtrt = fynk_read_file();
+	ifstream file(rtrt, ios::in);
+	if (!file) exit(1);
+	int n = 0;
+	vector<string> mas_neme_pynkt_naznach;
+	while (!file.eof())//запись в вектор пунктов назначений
+	{
+		string s,v;
+			file >> s >> s >> v >> s >> s;
+			mas_neme_pynkt_naznach.emplace_back(v);
+			n++;
+	}
+	file.close();
+	for (int i = 0; i < size(mas_neme_pynkt_naznach); i++) //убирание повторяющихся направлений для меню 
+	{
+		for (int j = 0; j < size(mas_neme_pynkt_naznach); j++)
+		{
+			if (j == i) 
+			{
+				continue;
+			}
+			if (mas_neme_pynkt_naznach[i] == mas_neme_pynkt_naznach[j])
+				{
+					auto iter = mas_neme_pynkt_naznach.begin(); // указатель на первый элемент
+
+					if (j != 0) { iter = iter + j; };
+
+					mas_neme_pynkt_naznach.erase(iter);
+			}
+			
+		}
+	}
+	
+	//перенос в дин_масив для меню
+	string *point_plane_mas =  new string [size(mas_neme_pynkt_naznach)+1];
+	point_plane_mas[0]="Выбирите пункт назначения по которому будет произведена сортировка:";
+	
+	for (int i = 0; i < size(mas_neme_pynkt_naznach[i]); i++)
+	{
+		point_plane_mas[i + 1] = mas_neme_pynkt_naznach[i];
+	}
+	
+	
+	int hhh;
+	hhh= startMenuCycle(point_plane_mas, size(mas_neme_pynkt_naznach) + 1);
+	
+	//вектор для добовления в вектор обьектов елементов масива содержашик одно направлениее(hhh)
+	vector<plane> mas;
+
+	 file.open(rtrt, ios::in);
+	for (int i = 0; i < n; i++)
+	{
+		int nober;
+		string type_plenet,
+			point_plein,
+			time_vilet;
+			float time_finish;
+		file >> nober >> type_plenet >> point_plein >> time_vilet >> time_finish;
+		if (point_plein== point_plane_mas[hhh])
+		{
+			plane d;
+			d.read_text(nober, type_plenet, point_plein, time_vilet, time_finish);
+			mas.emplace_back(d);
+		}
+	}
+	file.close();
+	delete []point_plane_mas;
+	n=size(mas);
+	//перевод в динамический масив
+	plane*mas_din=new plane[n];
+	for (int i = 0;  i < n;  i++)
+	{
+		mas_din[i] = mas[i];
+	}
+
+
+	//сортировка по длительности полёта
+	for (int j = 0; j < n; j++)
+	{
+		for (int i = 0; i < n-1; i++)
+		{
+			
+			if (mas_din[i].search_for_dest() > mas_din[i + 1].search_for_dest())
+			{
+				plane f=mas_din[i];
+				mas_din[i] = mas_din[i + 1];
+				mas_din[i + 1] = f;
+			}
+		}
+	}
+	//вивод
+	for (int i = 0; i < n; i++)
+	{
+		mas_din[i].vivod_cmd();
+	}
+	delete[]mas_din;
+	int code;
+	cout << "Нажмите ESC для выхода в главное меню" << endl;
+	do
+	{
+		code = _getch();
+	} while (code!= VK_ESCAPE);
+
 }
