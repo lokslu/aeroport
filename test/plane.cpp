@@ -31,27 +31,24 @@ plane::plane()
 void plane::vvod_nap_klav(string*type_mas_planet)
 {
 
-
-	
+	//!!!!!!!!!!!!!!!!!!!!!!!!
 	int nober, kolstrokmenu;
 	kolstrokmenu = 4;
 
 	cout << "¬ведите номер рейса\n";
 	cin >> nober;
 	nomber_reis = nober;
-
+	//!!!!!!!!!!!!!!!!!!!!!!!!
 
 	type_plenet = type_mas_planet[startMenuCycle(type_mas_planet, kolstrokmenu)];
 	system("cls");
-
+	//!!!!!!!!!!!!!!!!!!!!!!!!
 	string str;//локальна€ переменна€ пункта назначени€
 	cout << "¬ведите пункт назначени€" << endl;
 	cin >> str;
 	point_plein = str;
-
 	system("cls");
-
-
+	//!!!!!!!!!!!!!!!!!!!!!!!!
 
 	// преобразует врем€ с одного числа с зап€той в 2 целих
 	int x, i;
@@ -104,7 +101,7 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 	ss >> str;
 
 	time_vilet = str;
-
+	//!!!!!!!!!!!!!!!!!!!!!!!!
 
 	x = 0;
 	y = 0;
@@ -153,7 +150,7 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 	} while (x >= 24 || x < 0);
 
 	time_plein = y;
-
+	//!!!!!!!!!!!!!!!!!!!!!!!!
 	
 
 }
@@ -162,7 +159,8 @@ void plane::save_text(string neme_file)
 
 
 		ofstream file(neme_file, ios::app); // file -переменна€ файла к которому обращ€емс€
-		file<< nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_plein << endl;
+		file<< nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_plein
+		<< endl;
 		file.close();
 	
 }
@@ -205,28 +203,27 @@ plane::~plane()
 
 void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 {
+	//!!!!!!!!!!!!!!!!!!!!!!!!
 	int zapis, gt, gd;
 
 	zapis = 1;
 
-
 	plane *numbers;
-	plane *numbers2;
+	plane *numbers2=0;//требует иницыализацыи
 	numbers = new plane[zapis];
-	numbers2 = new plane[zapis];
-	delete[]numbers2;
+	//numbers2 = new plane[zapis];
+	//delete[]numbers2;
 	numbers[0].vvod_nap_klav(type_mas_planet);
 
 
 
 	do
 	{
-		gd = startMenuCycle(yes_no, 3);
-
+		gd = startMenuCycle(yes_no, 3);//хотите продолжить?
 
 		if (gd == 1)
 		{
-			gd = 1;
+			//gd = 1;
 			if (0 == zapis % 2)
 			{	
 				zapis++;
@@ -259,7 +256,7 @@ void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 	(CreateDirectory(L"./data", NULL));//создаЄт папку data (возвращ€ет 1) и не создаЄт папку если она уже создана (возвращ€ет 0)
 
 
-	gt = startMenuCycle(zapis_data, 3);
+	gt = startMenuCycle(zapis_data, 3);//’отите записать данные в Ќќ¬џ… файл или ƒќЅј¬»“№ к существуещему файлу
 
 	switch (gt)
 	{
@@ -271,6 +268,10 @@ void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 		cin.get();
 		getline(cin, neme_file1);
 		neme_file.append("./data/" + neme_file1);
+
+		fstream file(neme_file, ios::out);
+		file.close();
+
 		if (0 == zapis % 2)
 		{
 			for (int i = 0; i < zapis; i++)
@@ -295,7 +296,7 @@ void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 
 		string neme_file = fynk_read_file();
 
-		if (neme_file == "%$%")
+		if (neme_file == "*?*")
 		{
 			system("cls");
 			cout << "” вас нету не единого файла/n";
@@ -359,7 +360,7 @@ string fynk_read_file()
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!! то что не позволит вивести пустое меню
 		if (size_din_mas_menu <= 1)
 		{
-			return "%$%";
+			return "*?*";
 		}
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		string *lp = new string[size_din_mas_menu];
@@ -388,10 +389,10 @@ string fynk_read_file()
 
 void read_and_sotr() 
 {
-	string rtrt;
-	rtrt = fynk_read_file();
-	ifstream file(rtrt, ios::in);
-	if (!file) exit(1);
+	string neme_file;//им€ файла в котором будет проводитьс€ сортировка, она пуста€ 
+	neme_file = fynk_read_file(); //определение файла в котором будет проводитьс€ сортировка
+	ifstream file(neme_file, ios::in); //открытие файла в котором будет проводитьс€ сортировка
+	if (!file) exit(1); 
 	int n = 0;
 	vector<string> mas_neme_pynkt_naznach;
 	while (!file.eof())//запись в вектор пунктов назначений
@@ -402,6 +403,14 @@ void read_and_sotr()
 			n++;
 	}
 	file.close();
+	//n- количество строк в файле счита€ с последней пустой
+
+	cout << "++++++++++++++++++++++" << endl;
+	cout << size(mas_neme_pynkt_naznach)<<"=="<<n<<" "<< mas_neme_pynkt_naznach[0]<<endl;
+	cout << "++++++++++++++++++++++" << endl;
+	system("pause");
+
+	//n=size(mas_neme_pynkt_naznach) - факт
 	for (int i = 0; i < size(mas_neme_pynkt_naznach); i++) //убирание повтор€ющихс€ направлений дл€ меню 
 	{
 		for (int j = 0; j < size(mas_neme_pynkt_naznach); j++)
@@ -417,28 +426,46 @@ void read_and_sotr()
 					if (j != 0) { iter = iter + j; };
 
 					mas_neme_pynkt_naznach.erase(iter);
+					j--;
 			}
 			
 		}
 	}
 	
-	//перенос в дин_масив дл€ меню
-	string *point_plane_mas =  new string [size(mas_neme_pynkt_naznach)+1];
-	point_plane_mas[0]="¬ыбирите пункт назначени€ по которому будет произведена сортировка:";
+	auto iter = mas_neme_pynkt_naznach.end(); // указатель на последний элемент, дл€ удалени€ пустого значени€
+	--iter;
+	mas_neme_pynkt_naznach.erase(iter);
+
+
+
+
+
+
+	//n=size(mas_neme_pynkt_naznach) если в файле Ќ≈ЅџЋќ повтор€ющихс€ направлений
+	//n!=size(mas_neme_pynkt_naznach) если в файле ЅџЋ» повтор€ющихс€ направлений
 	
-	for (int i = 0; i < size(mas_neme_pynkt_naznach[i]); i++)
+	cout << "++++++++++++++++++++++" << endl;
+	cout << size(mas_neme_pynkt_naznach) << "количество" << n << endl;
+	cout << "++++++++++++++++++++++" << endl;
+	system("pause");
+
+	//перенос в дин_масив дл€ меню
+	string *point_plane_mas =  new string [size(mas_neme_pynkt_naznach)+1];//м////////////
+	point_plane_mas[0]="¬ыберите пункт назначени€ по которому будет произведена сортировка:";
+	
+	for (int i = 0; i < size(mas_neme_pynkt_naznach); i++)
 	{
 		point_plane_mas[i + 1] = mas_neme_pynkt_naznach[i];
 	}
 	
 	
 	int hhh;
-	hhh= startMenuCycle(point_plane_mas, size(mas_neme_pynkt_naznach) + 1);
+	hhh= startMenuCycle(point_plane_mas, size(mas_neme_pynkt_naznach)+1);
 	
-	//вектор дл€ добовлени€ в вектор обьектов елементов масива содержашик одно направлениее(hhh)
+	//вектор дл€ добовлени€ в него елементов масива содержашик одно направлениее(hhh)
 	vector<plane> mas;
 
-	 file.open(rtrt, ios::in);
+	 file.open(neme_file, ios::in);
 	for (int i = 0; i < n; i++)
 	{
 		int nober;

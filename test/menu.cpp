@@ -15,43 +15,47 @@
 
 using namespace std;
 
-int nomerstrokimenu = 1;  
 
 int startMenuCycle(string *mas_menu,  int kolstrokmenu)// функцы€ реализующ€ вывод и переключение пунктов меню
 {
-	system("cls");
+int nomerstrokimenu = 1;  
+	do
 	{
-		string result;
-		for (int i = 0; i < kolstrokmenu; i++)
+		system("cls");
 		{
-			if (i == nomerstrokimenu)
+			string result;
+			for (int i = 0; i < kolstrokmenu; i++)
+			{
+				if (i == nomerstrokimenu)
 
-				result.append("-> " + mas_menu[i] + "\n");    //append добавл€ет ->
-			else result.append(mas_menu[i] + "\n");
+					result.append("-> " + mas_menu[i] + "\n");    //append добавл€ет ->
+				else result.append(mas_menu[i] + "\n");
+			}
+
+			cout << result; //вывод меню
+		}
+		int code;
+		code = _getch(); //самое главное говно
+		switch (code)
+		{
+		case KEY_DOWN:
+			if (nomerstrokimenu == kolstrokmenu - 1) break;
+			else nomerstrokimenu++;
+			break;
+
+		case KEY_UP:
+			if (nomerstrokimenu == 1) break; //исключающ€€ if, чтобы не мен€ло переменную когда активний пункт меню в самом верху
+			else nomerstrokimenu--;
+			break;
+
+		case KEY_RETURN:
+			system("cls");
+			return nomerstrokimenu;
+			break;
 		}
 
-		cout << result; //вывод меню
-	}
-	int code;
-	code = _getch(); //самое главное говно
-	switch (code)
-	{
-	case KEY_DOWN:
-		if (nomerstrokimenu == kolstrokmenu - 1) break;
-		else nomerstrokimenu++;
-		break;
+		//cout << sizeof(mas_menu) / sizeof(*mas_menu);
+		//startMenuCycle(mas_menu, kolstrokmenu); //имела вид рекурсивной функции //изменена на цикл по причине первого возврата позицыи на несуществующий пункт меню
+	} while (true);
 
-	case KEY_UP:
-		if (nomerstrokimenu == 1) break; //исключающ€€ if, чтобы не мен€ло переменную когда активний пункт меню в самом верху
-		else nomerstrokimenu--;
-		break;
-
-	case KEY_RETURN:
-		system("cls");
-		return nomerstrokimenu;
-		break;
-	}
-
-	//cout << sizeof(mas_menu) / sizeof(*mas_menu);
-	startMenuCycle(mas_menu, kolstrokmenu);
 }
