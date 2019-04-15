@@ -1,11 +1,8 @@
 #include "pch.h"
 #include <iostream>
 #include <string>
-#include <stdio.h>//??????
-#include <conio.h>
-#include "menu.h"
-
-//#include "text_mas_menu.h"
+#include <conio.h>//дл€ _getch()
+#include "plane.h"
 
 #define KEY_UP 72 //по стандарту определ€ет что  KEY_UP -- 72
 #define KEY_DOWN 80
@@ -16,9 +13,9 @@
 using namespace std;
 
 
-int startMenuCycle(string *mas_menu,  int kolstrokmenu)// функцы€ реализующ€ вывод и переключение пунктов меню
+int startMenuCycle(string *mas_menu, int kolstrokmenu)// функцы€ реализующ€ вывод и переключение пунктов меню
 {
-int nomerstrokimenu = 1;  
+	int nomerstrokimenu = 1;
 	do
 	{
 		system("cls");
@@ -35,16 +32,24 @@ int nomerstrokimenu = 1;
 			cout << result; //вывод меню
 		}
 		int code;
-		code = _getch(); //самое главное говно
+		code = _getch(); //считывание нажатий клавиш
 		switch (code)
 		{
 		case KEY_DOWN:
-			if (nomerstrokimenu == kolstrokmenu - 1) break;
+			if (nomerstrokimenu == kolstrokmenu - 1)
+			{
+				nomerstrokimenu = 1;
+				break;
+			}
 			else nomerstrokimenu++;
 			break;
 
 		case KEY_UP:
-			if (nomerstrokimenu == 1) break; //исключающ€€ if, чтобы не мен€ло переменную когда активний пункт меню в самом верху
+			if (nomerstrokimenu == 1)
+			{
+				nomerstrokimenu =kolstrokmenu - 1;
+				break; //исключающ€€ if, чтобы не мен€ло переменную когда активний пункт меню в самом верху
+			}
 			else nomerstrokimenu--;
 			break;
 
@@ -54,8 +59,6 @@ int nomerstrokimenu = 1;
 			break;
 		}
 
-		//cout << sizeof(mas_menu) / sizeof(*mas_menu);
-		//startMenuCycle(mas_menu, kolstrokmenu); //имела вид рекурсивной функции //изменена на цикл по причине первого возврата позицыи на несуществующий пункт меню
 	} while (true);
 
 }

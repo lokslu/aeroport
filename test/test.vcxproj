@@ -155,7 +155,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="dirent.h" />
+    <ClInclude Include="menu items.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="pch.h" />

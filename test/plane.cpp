@@ -1,18 +1,14 @@
 #include "pch.h"
 #include <iostream>
-#include <istream>
+//#include <istream>
 #include <fstream>
 #include <sstream> //для  stringstream  // для переобразавания float в string
 #include <string>
 #include <vector>
-#include <stdio.h>//
 #include <windows.h>
 #include "plane.h" //обьявление класа
-#include "menu.h" // реализацыя меню
-#include "dirent.h"//
 #include <filesystem>
-#include <conio.h>
-
+#include <conio.h>// для _geth()
 
 #define KEY_UP 72 //по стандарту определяет что  KEY_UP -- 72
 #define KEY_DOWN 80
@@ -26,23 +22,50 @@ using namespace std;
 
 plane::plane()
 {
+	nomber_reis = 0;
+	type_plenet = "";
+	point_plein = "";
+	time_vilet = "";
+	time_plein = 0;
+
 }
+
 
 void plane::vvod_nap_klav(string*type_mas_planet)
 {
-
 	//!!!!!!!!!!!!!!!!!!!!!!!!
-	int nober, kolstrokmenu;
-	kolstrokmenu = 4;
+	int kolstrokmenu;
 
+	string nober1;
 	cout << "Введите номер рейса\n";
-	cin >> nober;
-	nomber_reis = nober;
+
+	bool repit=false;
+	do {
+		cin >> nober1;
+		int f = nober1.length();
+			for (int i = 0; i < f; i++)
+			{
+				if (isdigit(nober1[i]))
+				{
+					repit = true;
+				}
+				else
+				{
+					cout << "Номер должен состоять ТОЛЬКО из цыфр. Повторите попитку" << endl;
+					repit = false;
+					break;
+				}
+			}
+	} while (repit==false);
+
+		nomber_reis = stoi(nober1);
+
 	//!!!!!!!!!!!!!!!!!!!!!!!!
 
+	kolstrokmenu = 4;
 	type_plenet = type_mas_planet[startMenuCycle(type_mas_planet, kolstrokmenu)];
 	system("cls");
-	//!!!!!!!!!!!!!!!!!!!!!!!!
+	//!!!!!!!!!!!!!!!!!!!!!!!!	
 	string str;//локальная переменная пункта назначения
 	cout << "Введите пункт назначения" << endl;
 	cin >> str;
@@ -51,130 +74,175 @@ void plane::vvod_nap_klav(string*type_mas_planet)
 	//!!!!!!!!!!!!!!!!!!!!!!!!
 
 	// преобразует время с одного числа с запятой в 2 целих
-	int x, i;
+	
+	
+	int i;
 	i = 0;
-	float y;
+	
+	string str3,str2;
+	str = "";
 	cout << "Введите время вылета." << endl;
+	cout << "В формате ЧЧ.ММ" << endl;
+
+
 	do
 	{
-		cout << "Введите количество часов" << endl;
-		cin >> x;
-		if (x >= 24 || x < 0)
+		cin >> str;
+		if (str.length()==5)
 		{
+			str2 = ".";
+			char h1 = str[0],
+				h2= str[1],
+				h3= str[3],
+				h4= str[4];
 
+			if (isdigit(h1)
+				&& isdigit(h2)
+				&& str[2] == str2[0]
+				&& isdigit(h3)
+				&& isdigit(h4))
+			{
+				str2 = str.substr(0, 2);
+				str3 = str.substr(3, 2);
+				if ((stoi(str3) >= 60 || stoi(str3) < 0) || (stoi(str2) >= 24 || stoi(str2) < 0))
+				{
+					i = i + 1;
+					if (i == 7)
+					{
+						system("cls");
+						i = 0;
+					}
+					cout << "вы ввели не коректные даные. Ведьонное время в не диапазона. Ведите заново" << endl;
+				}
+				else
+				{
+					
+					break;
+				}
+			}
+			else
+			{
+				i = i + 1;
+				if (i == 7)
+				{
+					system("cls");
+					i = 0;
+				}
+				cout << "вы ввели не коректные даные.Вместо цыфр у вас буквы или отсутствует точка. Ведите заново" << endl;
+			}
+		}
+		else
+		{
 			i = i + 1;
 			if (i == 7)
 			{
 				system("cls");
 				i = 0;
 			}
-			cout << "вы ввели не коректные даные. Ведите заново" << endl;
+			cout << "вы ввели не коректные даные. Размер строки не соответствует. Ведите заново" << endl;
+				
+			
+
+			
 		}
-		else
+
+	} while (true);
+
+	time_vilet = str;
+
+	system("cls");
+	
+	//!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	float x=0, y=0;
+	str = "";
+
+	cout << "Введите время в пути." << endl;
+	cout << "В формате ЧЧ.ММ" << endl;
+
+	do
+	{
+		cin >> str;
+		if (str.length() == 5)
 		{
-			do
+			str2 = ".";
+			char h1 = str[0],
+				h2 = str[1],
+				h3 = str[3],
+				h4 = str[4];
+
+			if (isdigit(h1)
+				&& isdigit(h2)
+				&& str[2] == str2[0]
+				&& isdigit(h3)
+				&& isdigit(h4))
 			{
-				cout << "Введите количество минут" << endl;
-				cin >> y;
-				if (y >= 60 || y < 0)
+				str2 = str.substr(0, 2);
+				str3 = str.substr(3, 2);
+				if ((stoi(str3) >= 60 || stoi(str3) < 0) || (stoi(str2) >= 24 || stoi(str2) < 0))
 				{
-					i = i + 1;;
+					i = i + 1;
 					if (i == 7)
 					{
 						system("cls");
 						i = 0;
 					}
-					cout << "вы ввели не коректные даные. Ведите заново" << endl;
+					cout << "вы ввели не коректные даные. Ведьонное время в не диапазона. Ведите заново" << endl;
 				}
 				else
 				{
-					y = y / 100;
-					y = x + y;
+					x = stoi(str3);
+					x = x * 0.01;
+					y=stoi(str2)+x;
+					break;
 				}
-			} while (y >= 60 || y < 0);
+			}
+			else
+			{
+				i = i + 1;
+				if (i == 7)
+				{
+					system("cls");
+					i = 0;
+				}
+				cout << "вы ввели не коректные даные.Вместо цыфр у вас буквы или отсутствует точка. Ведите заново" << endl;
+			}
+		}
+		else
+		{
+			i = i + 1;
+			if (i == 7)
+			{
+				system("cls");
+				i = 0;
+			}
+			cout << "вы ввели не коректные даные. Размер строки не соответствует. Ведите заново" << endl;
+
+
+
+
 		}
 
-	} while (x >= 24 || x < 0);
+	} while (true);
 
 	stringstream ss; // для переобразавания float в string
 	ss << y;
 	ss >> str;
 
-	time_vilet = str;
-	//!!!!!!!!!!!!!!!!!!!!!!!!
-
-	x = 0;
-	y = 0;
-	str = "";
-
-	cout << "Введите время Польота." << endl;
-	do
-	{
-		cout << "Введите количество часов" << endl;
-		cin >> x;
-		if (x >= 24 || x < 0)
-		{
-
-			i = i + 1;
-			if (i == 7)
-			{
-				system("cls");
-				i = 0;
-			}
-			cout << "вы ввели не коректные даные. Ведите заново" << endl;
-		}
-		else
-		{
-			do
-			{
-				cout << "Введите количество минут" << endl;
-				cin >> y;
-				if (y >= 60 || y < 0)
-				{
-					i = i + 1;;
-					if (i == 7)
-					{
-						system("cls");
-						i = 0;
-					}
-					cout << "вы ввели не коректные даные. Ведите заново" << endl;
-				}
-				else
-				{
-					y = y / 100;
-					y = x + y;
-				}
-			} while (y >= 60 || y < 0);
-		}
-
-	} while (x >= 24 || x < 0);
-
 	time_plein = y;
-	//!!!!!!!!!!!!!!!!!!!!!!!!
-	
-
 }
 void plane::save_text(string neme_file)
 {
 
 
-		ofstream file(neme_file, ios::app); // file -переменная файла к которому обращяемся
-		file<< nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_plein
+	ofstream file(neme_file, ios::app); // file -переменная файла к которому обращяемся
+	file << nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_plein
 		<< endl;
-		file.close();
-	
-}
-void plane::save_text_dop(string neme_file)
-{	
-	
-	
-	fstream file(neme_file, ios::app);
-	
-	file << nomber_reis << " " << type_plenet << " " << point_plein << " " << time_vilet << " " << time_plein << endl;
 	file.close();
 
 }
-void plane::read_text(int nomber_reis1,string type_plenet1, string point_plein1, string time_vilet1, float time_plein1)
+
+void plane::read_text(int nomber_reis1, string type_plenet1, string point_plein1, string time_vilet1, float time_plein1)
 {
 	nomber_reis = nomber_reis1;
 	type_plenet = type_plenet1;
@@ -190,12 +258,12 @@ float plane::search_for_dest()
 void plane::vivod_cmd()
 {
 	cout << "Номер рейса: " << nomber_reis << endl;
-	cout << "Тип самолёта: " << type_plenet<< endl;
+	cout << "Тип самолёта: " << type_plenet << endl;
 	cout << "Пункт назначения: " << point_plein << endl;
-	cout << "Время вылета: " << time_vilet<< endl;
+	cout << "Время вылета: " << time_vilet << endl;
 	cout << "Время в пути: " << time_plein << endl;
 	cout << "---------------------------------------------" << endl;
-}	
+}
 
 plane::~plane()
 {
@@ -204,154 +272,103 @@ plane::~plane()
 void fynk_save(string*type_mas_planet, string*yes_no, string*zapis_data)
 {
 	//!!!!!!!!!!!!!!!!!!!!!!!!
-	int zapis, gt, gd;
-
-	zapis = 1;
-
-	plane *numbers;
-	plane *numbers2=0;//требует иницыализацыи
-	numbers = new plane[zapis];
-	//numbers2 = new plane[zapis];
-	//delete[]numbers2;
-	numbers[0].vvod_nap_klav(type_mas_planet);
+	int gt, gd;//переменные котррие определяют пункт меню
 
 
+	vector<plane> vect_mas_objekt; //объявления вектор динамического масива объектов
 
 	do
 	{
+		plane g;
+		g.vvod_nap_klav(type_mas_planet);
+		vect_mas_objekt.emplace_back(g);
+
 		gd = startMenuCycle(yes_no, 3);//хотите продолжить?
 
-		if (gd == 1)
-		{
-			//gd = 1;
-			if (0 == zapis % 2)
-			{	
-				zapis++;
-				numbers = new plane[zapis];
-				for (int j = 0; j < zapis - 1; j++)
-				{
-					numbers[j] = numbers2[j];
-				}
-				numbers[zapis - 1].vvod_nap_klav(type_mas_planet);
-				delete[] numbers2;
-
-			}
-			else
-			{
-				zapis++;
-				numbers2 = new plane[zapis];
-				for (int j = 0; j < zapis - 1; j++)
-				{
-					numbers2[j] = numbers[j];
-				}
-				numbers2[zapis - 1].vvod_nap_klav(type_mas_planet);
-				delete[] numbers;
-
-			}
-		}
-
-
-
 	} while (gd == 1);
-	(CreateDirectory(L"./data", NULL));//создаёт папку data (возвращяет 1) и не создаёт папку если она уже создана (возвращяет 0)
 
+	int size_din_mas = size(vect_mas_objekt);
 
-	gt = startMenuCycle(zapis_data, 3);//Хотите записать данные в НОВЫЙ файл или ДОБАВИТЬ к существуещему файлу
+	plane *din_mas_objekt = new plane[size_din_mas]; //объявления динамического масива объектов
 
-	switch (gt)
+	for (int i = 0; i < size(vect_mas_objekt); i++)
 	{
-	case 1:
-	{
-		cout << "Введите имя файла" << endl;
-		string neme_file;
-		string neme_file1;
-		cin.get();
-		getline(cin, neme_file1);
-		neme_file.append("./data/" + neme_file1);
-
-		fstream file(neme_file, ios::out);
-		file.close();
-
-		if (0 == zapis % 2)
-		{
-			for (int i = 0; i < zapis; i++)
-			{
-				numbers2[i].save_text(neme_file);
-			}
-			delete[] numbers2;
-		}
-		else
-		{
-			for (int i = 0; i < zapis; i++)
-			{
-				numbers[i].save_text(neme_file);
-			}
-			delete[] numbers;
-		}
+		din_mas_objekt[i] = vect_mas_objekt[i];
 	}
-	break;
-	case 2:
+
+
+	
+
+	string neme_file;
+	do
 	{
+		gt = startMenuCycle(zapis_data, 3);//Хотите записать данные в НОВЫЙ файл или ДОБАВИТЬ к существуещему файлу
 
-
-		string neme_file = fynk_read_file();
-
-		if (neme_file == "*?*")
+		switch (gt)
 		{
-			system("cls");
-			cout << "У вас нету не единого файла/n";
-			system("pause");
+			case 1:
+			{
+				cout << "Введите имя файла" << endl;
+				string neme_file1;
+				cin.get();
+				getline(cin, neme_file1);
+				neme_file.append("./data/" + neme_file1);
+
+				fstream file(neme_file, ios::out);
+				file.close();
+
+
+				for (int i = 0; i < size_din_mas; i++)
+				{
+					din_mas_objekt[i].save_text(neme_file);
+				}
+
+			}
+			break;
+			case 2:
+			{
+				neme_file = fynk_read_file();
+
+				if (neme_file == "*?*")
+				{
+					system("cls");
+					cout << "У вас нету не единого файла\n";
+					int code;
+					cout << "Нажмите ESC для возвращения" << endl;
+					do
+					{
+						code = _getch();
+					} while (code != VK_ESCAPE);
+				}
+				else
+				{
+					for (int i = 0; i < size_din_mas; i++)
+					{
+						din_mas_objekt[i].save_text(neme_file);
+					}
+				}
+			}
 			break;
 		}
-
-			if (0 == zapis % 2)
-			{
-				for (int i = 0; i < zapis; i++)
-				{
-					numbers2[i].save_text_dop(neme_file);
-				}
-				delete[] numbers2;
-			}
-			else
-			{
-
-
-				for (int i = 0; i < zapis; i++)
-				{
-					numbers[i].save_text_dop(neme_file);
-				}
-				delete[] numbers;
-			}
-
-		
-
-	}
-	break;
-	}
-
+	} while (neme_file == "*?*");
 }
 
 string fynk_read_file()
 {
-
-
-
 	vector<string> l;
 
-	//header('Content-Type: text/html; charset=utf-8'); //ПЕРЕКЛЮЧАЕТ ТИП ШИФРОВАНИЯ
 
 	namespace fs = std::experimental::filesystem;
 	{
 
-		int h = 0;
 		fs::path p;
 		for (const auto & entry : fs::directory_iterator("./data"))
 		{
 			p = entry.path();
 
-			//ff[h]= p.string();
+			
 			l.emplace_back(p.string());
-			//h++;
+			
 		}
 
 
@@ -365,13 +382,14 @@ string fynk_read_file()
 		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		string *lp = new string[size_din_mas_menu];
 		lp[0] = "Выбирете файл:";
-		h = 0;
+
+		int h = 0;
 		for (int i = 1; i < size_din_mas_menu; i++)
 		{
 
-			lp[i] = l[h];
+			lp[i] = l[i - 1];
 			lp[i].erase(0, 7);
-			h++;
+
 		}
 
 
@@ -387,51 +405,62 @@ string fynk_read_file()
 	}
 }
 
-void read_and_sotr() 
+void flight_search()
 {
 	string neme_file;//имя файла в котором будет проводиться сортировка, она пустая 
+
 	neme_file = fynk_read_file(); //определение файла в котором будет проводиться сортировка
+	
+
+
 	ifstream file(neme_file, ios::in); //открытие файла в котором будет проводиться сортировка
-	if (!file) exit(1); 
+	if (!file) 
+	{
+		cout << "В паке нет файлов с информацией" << endl;
+		int code;
+		cout << "Нажмите ESC для возвращения" << endl;
+		do
+		{
+			code = _getch();
+		} while (code != VK_ESCAPE);
+		return;
+	
+	}
+
 	int n = 0;
 	vector<string> mas_neme_pynkt_naznach;
 	while (!file.eof())//запись в вектор пунктов назначений
 	{
-		string s,v;
-			file >> s >> s >> v >> s >> s;
-			mas_neme_pynkt_naznach.emplace_back(v);
-			n++;
+		string s, v;
+		file >> s >> s >> v >> s >> s;
+		mas_neme_pynkt_naznach.emplace_back(v);
+		n++;
 	}
 	file.close();
 	//n- количество строк в файле считая с последней пустой
-
-	cout << "++++++++++++++++++++++" << endl;
-	cout << size(mas_neme_pynkt_naznach)<<"=="<<n<<" "<< mas_neme_pynkt_naznach[0]<<endl;
-	cout << "++++++++++++++++++++++" << endl;
-	system("pause");
 
 	//n=size(mas_neme_pynkt_naznach) - факт
 	for (int i = 0; i < size(mas_neme_pynkt_naznach); i++) //убирание повторяющихся направлений для меню 
 	{
 		for (int j = 0; j < size(mas_neme_pynkt_naznach); j++)
 		{
-			if (j == i) 
+			if (j == i)
 			{
 				continue;
 			}
 			if (mas_neme_pynkt_naznach[i] == mas_neme_pynkt_naznach[j])
-				{
-					auto iter = mas_neme_pynkt_naznach.begin(); // указатель на первый элемент
+			{
+				auto iter = mas_neme_pynkt_naznach.begin(); // указатель на первый элемент
 
-					if (j != 0) { iter = iter + j; };
+				if (j != 0) { iter = iter + j; };
 
-					mas_neme_pynkt_naznach.erase(iter);
-					j--;
+				mas_neme_pynkt_naznach.erase(iter);
+				j--;
 			}
-			
+
 		}
 	}
-	
+
 	auto iter = mas_neme_pynkt_naznach.end(); // указатель на последний элемент, для удаления пустого значения
 	--iter;
 	mas_neme_pynkt_naznach.erase(iter);
@@ -443,38 +472,41 @@ void read_and_sotr()
 
 	//n=size(mas_neme_pynkt_naznach) если в файле НЕБЫЛО повторяющихся направлений
 	//n!=size(mas_neme_pynkt_naznach) если в файле БЫЛИ повторяющихся направлений
-	
-	cout << "++++++++++++++++++++++" << endl;
-	cout << size(mas_neme_pynkt_naznach) << "количество" << n << endl;
-	cout << "++++++++++++++++++++++" << endl;
-	system("pause");
+
+
 
 	//перенос в дин_масив для меню
-	string *point_plane_mas =  new string [size(mas_neme_pynkt_naznach)+1];//м////////////
-	point_plane_mas[0]="Выберите пункт назначения по которому будет произведена сортировка:";
-	
+	string *point_plane_mas = new string[size(mas_neme_pynkt_naznach) + 1];//м////////////
+	point_plane_mas[0] = "Выберите пункт назначения по которому будет произведена сортировка:";
+
 	for (int i = 0; i < size(mas_neme_pynkt_naznach); i++)
 	{
 		point_plane_mas[i + 1] = mas_neme_pynkt_naznach[i];
 	}
-	
-	
+
+
 	int hhh;
-	hhh= startMenuCycle(point_plane_mas, size(mas_neme_pynkt_naznach)+1);
-	
+	hhh = startMenuCycle(point_plane_mas, size(mas_neme_pynkt_naznach) + 1);
+
+
+
+	//111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+
+
+
 	//вектор для добовления в него елементов масива содержашик одно направлениее(hhh)
 	vector<plane> mas;
 
-	 file.open(neme_file, ios::in);
+	file.open(neme_file, ios::in);
 	for (int i = 0; i < n; i++)
 	{
 		int nober;
 		string type_plenet,
 			point_plein,
 			time_vilet;
-			float time_finish;
+		float time_finish;
 		file >> nober >> type_plenet >> point_plein >> time_vilet >> time_finish;
-		if (point_plein== point_plane_mas[hhh])
+		if (point_plein == point_plane_mas[hhh])
 		{
 			plane d;
 			d.read_text(nober, type_plenet, point_plein, time_vilet, time_finish);
@@ -482,11 +514,11 @@ void read_and_sotr()
 		}
 	}
 	file.close();
-	delete []point_plane_mas;
-	n=size(mas);
+	delete[]point_plane_mas;
+	n = size(mas);
 	//перевод в динамический масив
-	plane*mas_din=new plane[n];
-	for (int i = 0;  i < n;  i++)
+	plane*mas_din = new plane[n];
+	for (int i = 0; i < n; i++)
 	{
 		mas_din[i] = mas[i];
 	}
@@ -495,12 +527,12 @@ void read_and_sotr()
 	//сортировка по длительности полёта
 	for (int j = 0; j < n; j++)
 	{
-		for (int i = 0; i < n-1; i++)
+		for (int i = 0; i < n - 1; i++)
 		{
-			
+
 			if (mas_din[i].search_for_dest() > mas_din[i + 1].search_for_dest())
 			{
-				plane f=mas_din[i];
+				plane f = mas_din[i];
 				mas_din[i] = mas_din[i + 1];
 				mas_din[i + 1] = f;
 			}
@@ -514,9 +546,10 @@ void read_and_sotr()
 	delete[]mas_din;
 	int code;
 	cout << "Нажмите ESC для выхода в главное меню" << endl;
+	
 	do
 	{
 		code = _getch();
-	} while (code!= VK_ESCAPE);
+	} while (code != VK_ESCAPE);
 
 }

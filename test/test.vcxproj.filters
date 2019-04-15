@@ -27,7 +27,7 @@
     <ClInclude Include="text_mas_menu.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="dirent.h">
+    <ClInclude Include="menu items.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
